@@ -1,13 +1,17 @@
 package school.oop;
 
+import school.oop.impl.AdresDAO;
+import school.oop.impl.AdresDAOPsql;
 import school.oop.impl.ReizigerDAO;
 import school.oop.impl.ReizigerDAOPsql;
+import school.oop.model.Adres;
 import school.oop.model.Reiziger;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -15,12 +19,16 @@ public class Main {
     public static void main(String[] args) throws SQLException, ParseException {
         Connection conn = Database.connect();
         ReizigerDAOPsql reizigerDao = new ReizigerDAOPsql(conn);
-        System.out.println("Alle reizigers:");
-        testReizigerDAO(reizigerDao);
+        AdresDAOPsql adresDao = new AdresDAOPsql(conn,reizigerDao);
 
+        System.out.println("Alle reizigers:");
         for(Reiziger reiziger : reizigerDao.findAll()){
             System.out.println(reiziger);
         }
+        testReizigerDAO(reizigerDao);
+        testAdresDAO(adresDao, reizigerDao);
+
+
 
     }
     /**
@@ -48,7 +56,7 @@ public class Main {
         rdao.save(sietske);
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
-        System.out.println("test zoeken met id:" + rdao.findById(sietske.getId()));
+        System.out.println("test zoeken met id:" + rdao.findById(1));
         System.out.println( java.sql.Date.valueOf(gbdatum));
         System.out.println("test zoeken met geboortedatum:" + rdao.findByGbdatum(gbdatum));
         rdao.delete(sietske);
@@ -60,5 +68,25 @@ public class Main {
 
 
         // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
+    }
+    private static void testAdresDAO(AdresDAO adao, ReizigerDAO rdao) throws SQLException {
+        List<Adres> initialList = adao.findAll();
+        for(Adres adres : initialList ){
+            System.out.println(adres);
+        }
+        System.out.println("before create" + initialList.size());
+Adres adres = new Adres(6, "1234ab", "12", "testSTraat", "testPlaats", 6);
+        adao.delete(adres);
+
+        adao.save(adres);
+        System.out.println("Before delete, after create " + adao.findAll().size() );
+
+        System.out.println("find by reiziger 6 returns, before update: " + adao.findByReiziger(new Reiziger(6, "S", "", "Boers", java.sql.Date.valueOf("1981-03-14"))));
+        adao.update(new Adres(6, "123", "12ed", "testSTraated", "testPlaatsED", 6));
+        System.out.println("After update:"+ adao.findByReiziger(new Reiziger(6, "S", "", "Boers", java.sql.Date.valueOf("1981-03-14"))));
+        adao.delete(adres);
+        System.out.println("after delete" + adao.findAll().size());
+
+
     }
 }
