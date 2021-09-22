@@ -1,9 +1,6 @@
 package school.oop;
 
-import school.oop.impl.AdresDAO;
-import school.oop.impl.AdresDAOPsql;
-import school.oop.impl.ReizigerDAO;
-import school.oop.impl.ReizigerDAOPsql;
+import school.oop.impl.*;
 import school.oop.model.Adres;
 import school.oop.model.Reiziger;
 
@@ -18,12 +15,14 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, ParseException {
         Connection conn = Database.connect();
-        ReizigerDAOPsql reizigerDao = new ReizigerDAOPsql(conn);
-        AdresDAOPsql adresDao = new AdresDAOPsql(conn,reizigerDao);
+        OVChipkaartDAO ovChipkaartDao = new OVChipkaartDAOPsql(conn);
+        ReizigerDAO reizigerDao = new ReizigerDAOPsql(conn,ovChipkaartDao);
+        AdresDAO adresDao = new AdresDAOPsql(conn,reizigerDao);
 
         System.out.println("Alle reizigers:");
         for(Reiziger reiziger : reizigerDao.findAll()){
             System.out.println(reiziger);
+            System.out.println(reiziger.getOvchipkaarten());
         }
         testReizigerDAO(reizigerDao);
         testAdresDAO(adresDao, reizigerDao);

@@ -10,10 +10,11 @@ import java.util.List;
 public class ReizigerDAOPsql implements ReizigerDAO {
     Connection conn;
     AdresDAO adao;
-
-    public ReizigerDAOPsql(Connection conn) {
+    OVChipkaartDAO ovdao;
+    public ReizigerDAOPsql(Connection conn, OVChipkaartDAO ovdao) {
         this.conn = conn;
         this.adao = new AdresDAOPsql(conn, this);
+        this.ovdao = ovdao;
     }
 
     @Override
@@ -92,10 +93,10 @@ public class ReizigerDAOPsql implements ReizigerDAO {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM reiziger");
         while (rs.next()) {
-            returnList.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), java.sql.Date.valueOf(rs.getString("geboortedatum"))
-                    , adao.findByReiziger(
-                    new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), java.sql.Date.valueOf(rs.getString("geboortedatum")))
-            )));
+            Reiziger reiziger = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), java.sql.Date.valueOf(rs.getString("geboortedatum")));
+            reiziger.setAdres(adao.findByReiziger(reiziger));
+            reiziger.setOvchipkaarten(ovdao.findByReiziger(reiziger));
+            returnList.add(reiziger);
         }
         rs.close();
         return returnList;

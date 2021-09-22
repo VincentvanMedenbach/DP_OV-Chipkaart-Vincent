@@ -1,6 +1,8 @@
 package school.oop.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reiziger {
     private int id;
@@ -9,7 +11,8 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
     private Adres adres;
-
+    private List<OVChipkaart> ovchipkaarten;
+ 
     Reiziger() {
     }
 
@@ -28,6 +31,16 @@ public class Reiziger {
         this.achternaam = achternaam;
         this.geboortedatum = geboortedatum;
         this.adres = adres;
+    }
+
+    public Reiziger(int id, String voorletters, String tussenvoegsels, String achternaam, Date geboortedatum, Adres adres, ArrayList<OVChipkaart> ovchipkaarten) {
+        this.id = id;
+        this.voorletters = voorletters;
+        this.tussenvoegsels = tussenvoegsels;
+        this.achternaam = achternaam;
+        this.geboortedatum = geboortedatum;
+        this.adres = adres;
+        this.ovchipkaarten = ovchipkaarten;
     }
 
     public Adres getAdres() {
@@ -80,6 +93,14 @@ public class Reiziger {
 
     public void setGeboortedatum(Date geboortedatum) {
         this.geboortedatum = geboortedatum;
+    }
+
+    public List<OVChipkaart> getOvchipkaarten() {
+        return ovchipkaarten;
+    }
+
+    public void setOvchipkaarten(List<OVChipkaart> ovchipkaarten) {
+        this.ovchipkaarten = ovchipkaarten;
     }
 
     @Override
