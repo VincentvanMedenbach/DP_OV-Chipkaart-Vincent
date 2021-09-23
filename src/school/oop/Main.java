@@ -2,6 +2,7 @@ package school.oop;
 
 import school.oop.impl.*;
 import school.oop.model.Adres;
+import school.oop.model.OVChipkaart;
 import school.oop.model.Reiziger;
 
 import java.sql.Connection;
@@ -19,13 +20,14 @@ public class Main {
         ReizigerDAO reizigerDao = new ReizigerDAOPsql(conn,ovChipkaartDao);
         AdresDAO adresDao = new AdresDAOPsql(conn,reizigerDao);
 
-        System.out.println("Alle reizigers:");
-        for(Reiziger reiziger : reizigerDao.findAll()){
-            System.out.println(reiziger);
-            System.out.println(reiziger.getOvchipkaarten());
-        }
-        testReizigerDAO(reizigerDao);
-        testAdresDAO(adresDao, reizigerDao);
+//        System.out.println("Alle reizigers:");
+//        for(Reiziger reiziger : reizigerDao.findAll()){
+//            System.out.println(reiziger);
+//            System.out.println(reiziger.getOvchipkaarten());
+//        }
+//        testReizigerDAO(reizigerDao);
+//        testAdresDAO(adresDao, reizigerDao);
+        testOvChip(ovChipkaartDao, new Reiziger(2,"S", "", "Boers", new Date(1-8-2000)));
 
 
 
@@ -85,6 +87,10 @@ Adres adres = new Adres(6, "1234ab", "12", "testSTraat", "testPlaats", 6);
         System.out.println("After update:"+ adao.findByReiziger(new Reiziger(6, "S", "", "Boers", java.sql.Date.valueOf("1981-03-14"))));
         adao.delete(adres);
         System.out.println("after delete" + adao.findAll().size());
+    }
+    private static void testOvChip(OVChipkaartDAO ovChipkaartDAO, Reiziger reiziger) throws SQLException {
+        List<OVChipkaart> ovChipkaarten = ovChipkaartDAO.findByReiziger(reiziger);
+        System.out.println(ovChipkaarten);
 
 
     }
