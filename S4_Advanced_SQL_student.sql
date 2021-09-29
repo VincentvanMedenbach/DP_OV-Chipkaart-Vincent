@@ -52,25 +52,22 @@ DROP VIEW IF EXISTS s4_3;
 CREATE
 OR REPLACE VIEW s4_3 AS                                                     -- [TEST]
 
-SELECT uitvoeringen.cursus, uitvoeringen.begindatum, count(inschrijvingen) as aantal_inschrijvingen
-FROM uitvoeringen
-         INNER JOIN inschrijvingen ON (uitvoeringen.begindatum = inschrijvingen.begindatum AND
-                                       uitvoeringen.cursus = inschrijvingen.cursus)
-group by uitvoeringen.cursus, uitvoeringen.begindatum
+SELECT inschrijvingen.cursus, inschrijvingen.begindatum, count(inschrijvingen) as aantal_inschrijvingen
+FROM inschrijvingen
+group by inschrijvingen.cursus, inschrijvingen.begindatum
 HAVING count(inschrijvingen) > 2
-   AND date_part('year', uitvoeringen.begindatum) = '2019';
+   AND date_part('year', inschrijvingen.begindatum) = '2019';
 
 -- S4.4.
--- Welke medewerkers hebben een bepaalde cursus meer dan één keer gevolgd?
+-- Welke medewerkers hebben een bepaalde cursus meer dan één keer gevolgd?-
 -- Geef medewerkernummer en cursuscode.
 DROP VIEW IF EXISTS s4_4;
 CREATE
 OR REPLACE VIEW s4_4 AS                                                     -- [TEST]
 
-SELECT medewerkers.mnr, inschrijvingen.cursus
-FROM medewerkers
-         INNER JOIN inschrijvingen ON (inschrijvingen.cursist = medewerkers.mnr)
-group by medewerkers.mnr, inschrijvingen.cursus
+SELECT inschrijvingen.cursist, inschrijvingen.cursus
+FROM inschrijvingen
+group by inschrijvingen.cursist, inschrijvingen.cursus
 HAVING count(inschrijvingen.cursus) > 1;
 
 
@@ -86,10 +83,9 @@ HAVING count(inschrijvingen.cursus) > 1;
 DROP VIEW IF EXISTS s4_5;
 CREATE
 OR REPLACE VIEW s4_5 AS                                                     -- [TEST]
-SELECT cursussen.code as cursus, count(uitvoeringen.cursus) as aantal
-FROM cursussen
-         INNER JOIN uitvoeringen ON uitvoeringen.cursus = cursussen.code
-group by cursussen.code;
+SELECT uitvoeringen.cursus, count(uitvoeringen.cursus) as aantal
+FROM uitvoeringen
+group by uitvoeringen.cursus;
 
 -- S4.6. 
 -- Bepaal hoeveel jaar leeftijdsverschil er zit tussen de oudste en de 
@@ -105,14 +101,17 @@ FROM medewerkers;
 
 
 -- S4.7. 
--- Geef van het hele bedrijf een overzicht van het aantal medewerkers dat
+-- Geef van het hele bedrijf een overzicht van het aan
+-- tal medewerkers dat
 -- er werkt (`aantal_medewerkers`), de gemiddelde commissie die ze
 -- krijgen (`commissie_medewerkers`), en hoeveel dat gemiddeld
 -- per verkoper is (`commissie_verkopers`).
 DROP VIEW IF EXISTS s4_7;
 CREATE
 OR REPLACE VIEW s4_7 AS                                                     -- [TEST]
-SELECT count(medewerkers) AS aantal_medewerkers, AVG(COALESCE(comm, 0))  as commissie_medewerkers, AVG(comm) as commissie_verkopers
+SELECT count(medewerkers)     AS aantal_medewerkers,
+       AVG(COALESCE(comm, 0)) as commissie_medewerkers,
+       AVG(comm)              as commissie_verkopers
 FROM medewerkers;
 
 
