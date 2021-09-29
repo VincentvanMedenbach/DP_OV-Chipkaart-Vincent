@@ -1,6 +1,8 @@
 package school.oop.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OVChipkaart {
     private int kaart_nummer;
@@ -9,6 +11,7 @@ public class OVChipkaart {
     private int saldo;
     private int reiziger_id;
     private Reiziger reiziger;
+    private List<OVChipkaartProduct> producten = new ArrayList<>();
 
     public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, int saldo, int reiziger_id, Reiziger reiziger) {
         this.kaart_nummer = kaart_nummer;
@@ -25,6 +28,10 @@ public class OVChipkaart {
         this.klasse = klasse;
         this.saldo = saldo;
         this.reiziger_id = reiziger_id;
+    }
+
+    public OVChipkaart(int kaart_nummer){
+        this.kaart_nummer = kaart_nummer;
     }
 
     public int getKaart_nummer() {
@@ -75,6 +82,14 @@ public class OVChipkaart {
         this.reiziger = reiziger;
     }
 
+    public List<OVChipkaartProduct> getProducten() {
+        return producten;
+    }
+
+    public void addProducten(int productNummer, String status, Date date) {
+        this.producten.add(new OVChipkaartProduct(productNummer, this.kaart_nummer, status, date));
+    }
+
     @Override
     public String toString() {
         return "OVChipkaart{" +
@@ -84,6 +99,7 @@ public class OVChipkaart {
                 ", saldo=" + saldo +
                 ", reiziger_id=" + reiziger_id +
                 ", reiziger=" + reiziger +
+                ", producten=" + producten +
                 '}';
     }
 }

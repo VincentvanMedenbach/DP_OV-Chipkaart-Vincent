@@ -1,6 +1,7 @@
 package school.oop.impl;
 
 import school.oop.model.OVChipkaart;
+import school.oop.model.Product;
 import school.oop.model.Reiziger;
 
 import java.sql.SQLException;
