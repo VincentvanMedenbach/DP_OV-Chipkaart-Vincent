@@ -111,18 +111,23 @@ OR REPLACE VIEW s5_7 AS                                                     -- [
 SELECT voorl,
        naam
 FROM medewerkers
-WHERE chef in (SELECT DISTINCT uitvoeringen.docent
+WHERE mnr in (SELECT DISTINCT uitvoeringen.docent
                FROM inschrijvingen
                         INNER JOIN uitvoeringen ON (uitvoeringen.begindatum = inschrijvingen.begindatum AND
                                                     uitvoeringen.cursus = inschrijvingen.cursus)
-               WHERE inschrijvingen.cursist = medewerkers.mnr AND (inschrijvingen.cursus = 'S02' OR inschrijvingen.cursus = 'OAG'));
+               WHERE inschrijvingen.cursist = chef
+                 AND (inschrijvingen.cursus = 'S02' OR inschrijvingen.cursus = 'OAG'));
 
 
 
 -- S5.8.
 -- Geef de naam van de medewerkers die nog nooit een cursus hebben gegeven.
-DROP VIEW IF EXISTS s5_8; CREATE OR REPLACE VIEW s5_8 AS                                                     -- [TEST]
-SELECT naam FROM medewerkers WHERE mnr NOT IN (SELECT DISTINCT docent from uitvoeringen WHERE docent IS NOT NULL);
+DROP VIEW IF EXISTS s5_8;
+CREATE
+OR REPLACE VIEW s5_8 AS                                                     -- [TEST]
+SELECT naam
+FROM medewerkers
+WHERE mnr NOT IN (SELECT DISTINCT docent from uitvoeringen WHERE docent IS NOT NULL);
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
 -- Met onderstaande query kun je je code testen. Zie bovenaan dit bestand
