@@ -1,5 +1,6 @@
 package school.oop;
 
+import com.sun.source.doctree.SystemPropertyTree;
 import school.oop.impl.*;
 import school.oop.model.*;
 
@@ -89,8 +90,48 @@ public class Main {
     }
 
     private static void testOvChip(OVChipkaartDAO ovChipkaartDAO, Reiziger reiziger) throws SQLException {
-        List<OVChipkaart> ovChipkaarten = ovChipkaartDAO.findByReiziger(reiziger);
-        System.out.println(ovChipkaarten);
+        Product product1 = new Product(6, "Studentenreisproduct", "beschrijving", 50);
+        Product product2 = new Product(7, "Studentenreisproduct", "beschrijving", 50);
+
+        try {
+            List<OVChipkaart> ovChipkaarten = ovChipkaartDAO.findByReiziger(reiziger);
+            System.out.println(ovChipkaarten);
+        } catch (Exception e) {
+            System.out.println("Error finding by Reiziger");
+        }
+        OVChipkaart ovChipkaart = new OVChipkaart(1231, new java.util.Date(), 2, 4, reiziger);
+        ovChipkaart.addProducten(product1.getProduct_nummer(), "test", new Date(System.currentTimeMillis()));
+        try {
+            ovChipkaartDAO.save(ovChipkaart);
+        } catch (Exception e) {
+            System.out.println("Saving failed");
+        }
+        System.out.println("voor update na save: \n" + ovChipkaartDAO.findById(ovChipkaart.getKaart_nummer()));
+        System.out.println("find by products: \n" + ovChipkaartDAO.findByProduct(product1.getProduct_nummer()));
+        try {
+            ovChipkaart.addProducten(product2.getProduct_nummer(), "test2", new Date(System.currentTimeMillis()));
+            ovChipkaartDAO.update(ovChipkaart);
+            System.out.println("na save: \n" + ovChipkaartDAO.findById(ovChipkaart.getKaart_nummer()));
+
+        } catch (Exception e) {
+            System.out.println("update failed!");
+        }
+
+        try {
+            ovChipkaartDAO.delete(ovChipkaart);
+        } catch (Exception e) {
+            System.out.println("Delete failed");
+        }
+        try {
+            System.out.println("Deleted?: ");
+
+            ovChipkaartDAO.findById(ovChipkaart.getKaart_nummer());
+            System.out.println("Nee");
+
+        }catch(Exception e){
+            System.out.println("Ja");
+
+        }
     }
 
     // Ids weghalen, eigenaar hoort voor relatie te zorgen

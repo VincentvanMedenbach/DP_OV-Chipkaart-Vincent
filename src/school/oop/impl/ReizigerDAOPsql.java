@@ -50,6 +50,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
     @Override
     public boolean delete(Reiziger reiziger) throws SQLException {
+        PreparedStatement stmtRelation = conn.prepareStatement("DELETE FROM ov_chipkaart WHERE reiziger_id=?");
+        stmtRelation.setInt(1, reiziger.getId());
+         stmtRelation.executeUpdate();
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM reiziger WHERE reiziger_id=?");
         stmt.setInt(1, reiziger.getId());
         int deleted = stmt.executeUpdate();

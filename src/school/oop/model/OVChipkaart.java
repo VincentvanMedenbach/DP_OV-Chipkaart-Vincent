@@ -1,6 +1,6 @@
 package school.oop.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,14 @@ public class OVChipkaart {
 
     public OVChipkaart(int kaart_nummer){
         this.kaart_nummer = kaart_nummer;
+    }
+
+    public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, int saldo, Reiziger reiziger) {
+        this.kaart_nummer = kaart_nummer;
+        this.geldig_tot = geldig_tot;
+        this.klasse = klasse;
+        this.saldo = saldo;
+        this.reiziger = reiziger;
     }
 
     public int getKaart_nummer() {
