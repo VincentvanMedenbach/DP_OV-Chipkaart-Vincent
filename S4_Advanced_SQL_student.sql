@@ -34,7 +34,7 @@ CREATE
 OR REPLACE VIEW s4_1 AS                                                     -- [TEST]
 SELECT mnr, functie, gbdatum
 FROM medewerkers
-WHERE gbdatum < '1980-01-01'::date AND( functie='VERKOPER' OR functie='TRAINER');
+WHERE gbdatum < TO_DATE('19800103','YYYYMMDD') AND( functie='VERKOPER' OR functie='TRAINER');
 
 -- S4.2. 
 -- Geef de naam van de medewerkers met een tussenvoegsel (b.v. 'van der').
@@ -56,7 +56,7 @@ SELECT inschrijvingen.cursus, inschrijvingen.begindatum, count(inschrijvingen) a
 FROM inschrijvingen
 group by inschrijvingen.cursus, inschrijvingen.begindatum
 HAVING count(inschrijvingen) > 2
-   AND date_part('year', inschrijvingen.begindatum) = '2019';
+   AND date_part('year', inschrijvingen.begindatum) = 2019;
 
 -- S4.4.
 -- Welke medewerkers hebben een bepaalde cursus meer dan één keer gevolgd?-
